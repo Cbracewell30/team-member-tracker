@@ -1,5 +1,5 @@
-const Iquirer = require('inquirer');
-const db= require("./db/connection")
+const inquirer = require('inquirer');
+const db = require("./db/connection")
 
 // creating empty arrays
 let departmentArray = []
@@ -28,16 +28,20 @@ function getInfo() {
                     addRole();
                     break;
                 case "New Employee":
-                    addemployee();
+                    addEmployee();
                     break;
                 case "Update Employee's Role":
                     updateRole();
+                    break;
                 case "View Departments":
                     viewDepartment();
+                    break;
                 case "View Employees":
                     viewEmployees();
+                    break;
                 case "View Roles":
                     viewRoles();
+                    break;
                 default:
                     // end databse connection
                     db.end()
@@ -48,109 +52,153 @@ function getInfo() {
 
 
 // Manger questionaire 
-function addManager() {
+function addDepartment() {
     inquirer.prompt([
         {
             type: "input",
-            name: "name",
-            message: "What is the Employee's Name",
-
-        },
-        {
-            type: "input",
-            name: "id",
-            message: "What is the Employee's ID number?",
-
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "What is the Employee's email address?",
-
-        },
-        {
-            type: "input",
-            name: "office",
-            message: "What is the Employee's office number?",
+            name: "department",
+            message: "What is the Name of the Department",
 
         },
         // create manager object with answers
     ]).then((answers) => {
-        let newManager = new Manager(answers.name, answers.id, answers.email, answers.office)
-        managerArray.push(newManager);
-        getInfo()
+        db.query("INSERT INTO department(name) VALUES (?)", [answers.department], function (err, data) {
+            if (err) throw err;
+            console.table(data)
+            getInfo()
+        })
+
+
     })
 }
 
 // Engineer questionaire
 
-function addEngineer() {
+function addRole() {
     inquirer.prompt([
         {
             type: "input",
-            name: "name",
-            message: "What is the Engineer's Name",
+            name: "title",
+            message: "What is the Title ",
 
         },
         {
             type: "input",
-            name: "id",
-            message: "What is the Engineer's ID number?",
+            name: "salary",
+            message: "What is the Roles Salary?",
 
         },
         {
-            type: "input",
-            name: "email",
-            message: "What is the Engineer's email address?",
+            type: "list",
+            choices: [
+                {
+                    name: 'Technology',
+                    value: 1
+                }
+            ],
+            name: "department_id",
+            message: "What is the Name of the Department ID?",
 
-        },
-        {
-            type: "input",
-            name: "github",
-            message: "What is the Engineer's GitHub username?",
+        }
 
-        },
-        // create engineer object with answers
     ]).then((answers) => {
-        let newEngineer = new Engineer(answers.name, answers.id, answers.email, answers.github)
-        engineerArray.push(newEngineer);
-        getInfo()
+        db.query("INSERT INTO roles(title,salary,department_id) VALUES(?,?,?)", [answers.title, answers.salary, answers.department_id],
+            function (err, data) {
+                if (err) throw err;
+                console.table(data)
+                getInfo()
+            })
+
     })
 
 }
 
-//Intern questionaire
-function addIntern() {
+
+function addEmployee() {
     inquirer.prompt([
         {
             type: "input",
-            name: "name",
-            message: "What is the Intern's Name",
+            name: "first_name",
+            message: "What is the Employee's First Name",
 
         },
         {
             type: "input",
-            name: "id",
-            message: "What is the Intern's ID number?",
+            name: "last_name",
+            message: "What is the Employee's Last Name",
 
         },
         {
-            type: "input",
-            name: "email",
-            message: "What is the Intern's email address?",
+            type: "list",
+            choices: [
+                {
+                    name: 'Manager',
+                    value: 1
+                },
+                {
+                    name: 'Leader',
+                    value: 2
+                },
+                {
+                    name: 'Intern',
+                    value: 3
+                }
+            ],
+            name: "role_id",
+            message: "What is the Employee's Role ID number?",
 
         },
         {
-            type: "input",
-            name: "school",
-            message: "What is the Intern's school name?",
+            type: "list",
+            choices: [
+                {
+                    name: "Not Appliciable",
+                    value: null
+                }
+            ],
 
-        },
+            name: "manager_id",
+            message: "What is the Employee's Manager ID?",
+
+        }
         // create intern object with answers
     ]).then((answers) => {
-        let newIntern = new Intern(answers.name, answers.id, answers.email, answers.school)
-        internArray.push(newIntern);
-
-        getInfo()
+        db.query("INSERT INTO employee(first_name,last_name,role_id,manager_id) VALUES(?,?,?,?)", [answers.first_name, answers.last_name, answers.role_id, answers.manager_id],
+            function (err, data) {
+                if (err) throw err;
+                console.table(data)
+                getInfo()
+            })
     })
 }
+
+function viewDepartment() {
+    db.query("SELECT * FROM department",
+        function (err, data) {
+            if (err) throw err;
+            console.table(data)
+            getInfo()
+        })
+};
+
+function viewRoles() {
+    db.query("SELECT * FROM roles",
+        function (err, data) {
+            if (err) throw err;
+            console.table(data)
+            getInfo()
+        })
+};
+function viewEmployees() {
+    db.query("SELECT * FROM employee",
+        function (err, data) {
+            if (err) throw err;
+            console.table(data)
+            getInfo()
+        })
+};
+
+
+
+
+getInfo()
