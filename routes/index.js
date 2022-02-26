@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-router.use(require('./voterRoutes'));
+router.use(require('./departmentRoutes'));
 
 
 module.exports = router;
