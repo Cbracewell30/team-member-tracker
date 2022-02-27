@@ -98,6 +98,10 @@ function addRole() {
                 {
                     name: "Legal",
                     value: 2
+                },
+                {
+                    name: "Marketing",
+                    value: 3
                 }
             ],
             name: "department_id",
@@ -140,7 +144,7 @@ function addEmployee() {
                     value: 1
                 },
                 {
-                    name: '2: Leader',
+                    name: '2:Team Leader',
                     value: 2
                 },
                 {
@@ -156,16 +160,16 @@ function addEmployee() {
             type: "list",
             choices: [
                 {
-                    name: "Not Appliciable",
-                    value: null
-                },
-                {
-                    name:"John Gome",
+                    name: "John Jones",
                     value: 1
                 },
                 {
-                    name: "Man Boy",
+                    name:"Derrick Fisher",
                     value: 2
+                },
+                {
+                    name: "Homer Simpson",
+                    value: 3
                 }
             ],
 
@@ -175,16 +179,14 @@ function addEmployee() {
         }
         // create intern object with answers
     ]).then((answers) => {
-        let newEmployee = [answers.first_name, answers.last_name, answers.role_id, answers.manager_id]
         db.query("INSERT INTO employee(first_name,last_name,role_id,manager_id) VALUES(?,?,?,?)", [answers.first_name, answers.last_name, answers.role_id, answers.manager_id],
             function (err, data) {
                 if (err) throw err;
                 console.table(data)
                 getInfo()
-                employeesArray.push(newEmployee);
             })
     })
-}
+};
 
 function viewDepartment() {
     db.query("SELECT * FROM department",
@@ -224,33 +226,25 @@ function updateRole() {
                     value:1
                 },
                 {
-                    name:"Greg Greg",
+                    name:"Tim Thomas",
                     value:2
                 },
                 {
-                    name:"David Go",
+                    name:"Derrick Fisher",
                     value:3
                 },
                 {
-                    name:"Man Boy",
+                    name:"Nick House",
                     value:4
                 },
                 {
-                    name:"Derrick Fisher",
+                    name:"Homer Simpson",
                     value:5
                 },
                 {
-                    name:"Tim Thomas",
+                    name:"Bart Simpson",
                     value:6
                 },
-                {
-                    name:"James Jones",
-                    value:7
-                },
-                {
-                    name:"Homer Simpson",
-                    value:8
-                }
             ],
             name: "employee",
             message: "What employee are you updating?",
