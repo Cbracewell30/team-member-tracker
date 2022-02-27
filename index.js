@@ -1,15 +1,13 @@
+// Using Inquirer and connection
 const inquirer = require('inquirer');
 const db = require("./db/connection")
 
-// creating empty arrays
-let departmentArray = []
-let rolesArray = []
-let employeesArray = []
 
 //  Questions prompt with avialble options
 
 function getInfo() {
     inquirer.prompt([
+        // Start questoin prompt
         {
             type: "list",
             name: "userMenu",
@@ -21,6 +19,7 @@ function getInfo() {
         // depending on the answer the application follows the correct path
         .then((answers) => {
             switch (answers.userMenu) {
+                // switch cases for each prompt option
                 case "New Department":
                     addDepartment();
                     break;
@@ -51,7 +50,7 @@ function getInfo() {
 };
 
 
-// Manger questionaire 
+// Department Questions
 function addDepartment() {
     inquirer.prompt([
         {
@@ -60,7 +59,7 @@ function addDepartment() {
             message: "What is the Name of the Department",
 
         },
-        // create manager object with answers
+        // Takes the question answer and using it to query.
     ]).then((answers) => {
         db.query("INSERT INTO department(name) VALUES (?)", [answers.department], function (err, data) {
             if (err) throw err;
@@ -70,10 +69,9 @@ function addDepartment() {
 
 
     })
-}
+};
 
-// Engineer questionaire
-
+// Role questionaire
 function addRole() {
     inquirer.prompt([
         {
@@ -121,7 +119,7 @@ function addRole() {
 
 }
 
-
+// Employee question list
 function addEmployee() {
     inquirer.prompt([
         {
@@ -177,7 +175,7 @@ function addEmployee() {
             message: "What is the Employee's Manager ID?",
 
         }
-        // create intern object with answers
+       
     ]).then((answers) => {
         db.query("INSERT INTO employee(first_name,last_name,role_id,manager_id) VALUES(?,?,?,?)", [answers.first_name, answers.last_name, answers.role_id, answers.manager_id],
             function (err, data) {
@@ -188,6 +186,7 @@ function addEmployee() {
     })
 };
 
+// Query to Show all departments
 function viewDepartment() {
     db.query("SELECT * FROM department",
         function (err, data) {
@@ -197,6 +196,7 @@ function viewDepartment() {
         })
 };
 
+// Query to Show all roles
 function viewRoles() {
     db.query("SELECT * FROM roles",
         function (err, data) {
@@ -206,6 +206,7 @@ function viewRoles() {
         })
 };
 
+// Query to Show all Employees
 function viewEmployees() {
     db.query("SELECT * FROM employee",
         function (err, data) {
@@ -215,8 +216,8 @@ function viewEmployees() {
         })
 };
 
+// Function to update employees roles
 function updateRole() {
-    
     inquirer.prompt([
         {
             type: "list",
@@ -270,6 +271,7 @@ function updateRole() {
 
     }
     ]).then((answers) => {
+        // Querying for employees list to update the roles id or that employee
     db.query("UPDATE employee SET role_id = ? WHERE id = ?", [answers.role_id, answers.employee], (err,data) =>{
         if(err) throw err;
         console.table(data)
@@ -279,5 +281,5 @@ function updateRole() {
 };
 
 
-
+// Function to start prompt
 getInfo()
