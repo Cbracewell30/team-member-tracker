@@ -121,6 +121,7 @@ function addRole() {
 
 // Employee question list
 function addEmployee() {
+    
     inquirer.prompt([
         {
             type: "input",
@@ -137,6 +138,7 @@ function addEmployee() {
         {
             type: "list",
             choices: [
+                
                 {
                     name: '1: Manager',
                     value: 1
@@ -158,16 +160,20 @@ function addEmployee() {
             type: "list",
             choices: [
                 {
+                    name: 'Not Applicable',
+                    value: null
+                },
+                {
                     name: "John Jones",
                     value: 1
                 },
                 {
                     name:"Derrick Fisher",
-                    value: 2
+                    value: 3
                 },
                 {
                     name: "Homer Simpson",
-                    value: 3
+                    value: 5
                 }
             ],
 
@@ -253,7 +259,7 @@ function updateRole() {
     {
         type: "list",
         choices: [
-            {
+          {
                 name: '1: Manager',
                 value: 1
             },
