@@ -23,3 +23,4 @@ CREATE TABLE employee(
     manager_id INTEGER references employee(id) on Delete set NULL
 );
 
+

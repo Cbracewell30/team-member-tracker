@@ -30,7 +30,7 @@ function getInfo() {
                 case "New Employee":
                     addEmployee();
                     break;
-                case "Update Employee's Role":
+                case "Update Employee Role":
                     updateRole();
                     break;
                 case "View Departments":
@@ -94,6 +94,10 @@ function addRole() {
                 {
                     name: 'Technology',
                     value: 1
+                },
+                {
+                    name: "Legal",
+                    value: 2
                 }
             ],
             name: "department_id",
@@ -132,15 +136,15 @@ function addEmployee() {
             type: "list",
             choices: [
                 {
-                    name: 'Manager',
+                    name: '1: Manager',
                     value: 1
                 },
                 {
-                    name: 'Leader',
+                    name: '2: Leader',
                     value: 2
                 },
                 {
-                    name: 'Intern',
+                    name: '3: Intern',
                     value: 3
                 }
             ],
@@ -154,6 +158,14 @@ function addEmployee() {
                 {
                     name: "Not Appliciable",
                     value: null
+                },
+                {
+                    name:"John Gome",
+                    value: 1
+                },
+                {
+                    name: "Man Boy",
+                    value: 2
                 }
             ],
 
@@ -163,11 +175,13 @@ function addEmployee() {
         }
         // create intern object with answers
     ]).then((answers) => {
+        let newEmployee = [answers.first_name, answers.last_name, answers.role_id, answers.manager_id]
         db.query("INSERT INTO employee(first_name,last_name,role_id,manager_id) VALUES(?,?,?,?)", [answers.first_name, answers.last_name, answers.role_id, answers.manager_id],
             function (err, data) {
                 if (err) throw err;
                 console.table(data)
                 getInfo()
+                employeesArray.push(newEmployee);
             })
     })
 }
@@ -189,6 +203,7 @@ function viewRoles() {
             getInfo()
         })
 };
+
 function viewEmployees() {
     db.query("SELECT * FROM employee",
         function (err, data) {
@@ -198,6 +213,76 @@ function viewEmployees() {
         })
 };
 
+function updateRole() {
+    
+    inquirer.prompt([
+        {
+            type: "list",
+            choices: [
+                {
+                    name: "John Jones",
+                    value:1
+                },
+                {
+                    name:"Greg Greg",
+                    value:2
+                },
+                {
+                    name:"David Go",
+                    value:3
+                },
+                {
+                    name:"Man Boy",
+                    value:4
+                },
+                {
+                    name:"Derrick Fisher",
+                    value:5
+                },
+                {
+                    name:"Tim Thomas",
+                    value:6
+                },
+                {
+                    name:"James Jones",
+                    value:7
+                },
+                {
+                    name:"Homer Simpson",
+                    value:8
+                }
+            ],
+            name: "employee",
+            message: "What employee are you updating?",
+    },
+    {
+        type: "list",
+        choices: [
+            {
+                name: '1: Manager',
+                value: 1
+            },
+            {
+                name: '2: Leader',
+                value: 2
+            },
+            {
+                name: '3: Intern',
+                value: 3
+            }
+        ],
+        name: "role_id",
+        message: "What is the Employee's New Role ID number?",
+
+    }
+    ]).then((answers) => {
+    db.query("UPDATE employee SET role_id = ? WHERE id = ?", [answers.role_id, answers.employee], (err,data) =>{
+        if(err) throw err;
+        console.table(data)
+        getInfo()
+    })
+})
+};
 
 
 
