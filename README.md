@@ -36,7 +36,7 @@ Langues used in this project include JavaScript,ES6,Node
 
                                  ##Questions
 #### Github
-[Check out my github](https://github.com/Cbracwell30)
+[Check out my github](https://github.com/Cbracwell30/team-member-tracker)
 
 #### Email
 Feel free to reach me at chrisbracewell35@gmial.com for any questions regarding this project.
